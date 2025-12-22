@@ -1,5 +1,4 @@
 <?php
-// app/Http/Controllers/TownController.php
 namespace App\Http\Controllers;
 use App\Models\Town;
 use App\Models\Clan;

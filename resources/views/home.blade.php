@@ -78,12 +78,41 @@
             /* make sure it's behind the content */
         }
 
+        .hero-section img {
+            height: 500px;
+            width: 600px;
+            border-radius: 12px;
+        }
 
         .hero-content {
             position: relative;
             z-index: 1;
         }
 
+        /* Who I Am Section */
+        .who-section {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .who-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            height: 100%;
+            border-left: 4px solid var(--saffron-yellow);
+        }
+
+        .abt-content {
+            padding: 8opx 0;
+            text-align: center;
+        }
+
+        /* .about img{
+            height: 800px;
+            width: auto;
+        } */
         .feature-card {
             border: none;
             border-radius: 15px;
@@ -110,24 +139,168 @@
             color: var(--navy-blue);
         }
 
-        .cta-section {
-            background: linear-gradient(135deg, var(--saffron-yellow), #FFA000);
+        /* Focus Areas */
+        .focus-section {
             padding: 80px 0;
+            background: var(--light-bg);
         }
 
+        .focus-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+            border-top: 4px solid var(--saffron-yellow);
+        }
+
+        .focus-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .focus-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--saffron-yellow), #FFA000);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            color: var(--navy-blue);
+        }
+
+        /* Impact Highlights */
+        .impact-section {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .impact-card {
+            background: linear-gradient(135deg, var(--navy-blue), #003366);
+            color: white;
+            border-radius: 15px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            height: 100%;
+            transition: transform 0.3s;
+        }
+
+        .impact-card:hover {
+            transform: scale(1.05);
+        }
+
+        .impact-icon {
+            font-size: 3rem;
+            color: var(--saffron-yellow);
+            margin-bottom: 1rem;
+        }
+
+
+        /* News Section */
+        .news-section {
+            padding: 80px 0;
+            background: var(--light-bg);
+        }
+
+        .news-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+            height: 100%;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .news-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .news-content {
+            padding: 1.5rem;
+        }
+
+        .news-date {
+            color: var(--saffron-yellow);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--navy-blue), #003366);
+            padding: 80px 0;
+            color: white;
+            text-align: center;
+        }
+
+        .contact-section {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        /* Footer */
         .footer {
             background-color: var(--navy-blue);
             color: white;
-            padding: 40px 0 20px;
+            padding: 60px 0 20px;
+        }
+
+        .footer h5 {
+            color: var(--saffron-yellow);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
         }
 
         .footer a {
-            color: var(--saffron-yellow);
+            color: white;
             text-decoration: none;
+            transition: color 0.3s;
         }
 
         .footer a:hover {
-            color: #FFA000;
+            color: var(--saffron-yellow);
+        }
+
+        .social-links a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: var(--saffron-yellow);
+            color: var(--navy-blue);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            transition: transform 0.3s;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
         }
 
         .section-title {
@@ -156,7 +329,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top mb-4">
         <div class="container">
             <a class="navbar-brand" href="#home">
-                <i class="bi bi-flag-fill"></i> PROJECT 29
+                <i class="bi bi-flag-fill"></i> JAMES PAPAY KWABO
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -170,7 +343,13 @@
                         <a class="nav-link" href="#about">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#features">Features</a>
+                        <a class="nav-link" href="#focus">Key Focus</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#awards">Awards</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#blogs">Blog</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#cta">Join Us</a>
@@ -206,40 +385,64 @@
         </div>
     </nav>
 
-    {{-- Hero Section --}}
-    <section id="home" class="py-5 hero-section">
-        <div class="container hero-content">
-            <div class="row align-items-center">
-                <div class="col-lg-6 mt-5">
-                    <h1 class=" display-3 fw-bold mb-4 text-justify align-middle">Not Too Young To Lead-Project29</h1>
-                    <p class="lead">Not Too Young To Lead Movement Recruitment Initiative - Lofa County Electoral
-                        District #5, Liberia</p>
-                    <p class="lead">
-                        Join TEAM KWABO and be part of the Not Too Young To Lead Movement,
-                        empowering youth leadership and civic participation ahead of the
-                        2029 elections in Lofa County.
-                    </p>
-                    <p class="lead mb-4">Building Tomorrow & shaping the future Together. Your voice
-                        matters, your participation counts.</p>
+    <section id="home" class="hero-section">
+        <div class="container">
+            <div class="row align-items-center hero-content">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h1 class="hero-title">Empowering Youth. Strengthening Communities. Advancing Liberia.</h1>
+                    <p class="hero-subtitle">Community Leader | Lecturer | Youth Advocate | Humanitarian</p>
+                    <p class="lead mb-4">Based in rural Liberia (Lofa County), dedicated to transforming lives through
+                        education, civic engagement, and inclusive leadership.</p>
                     <a href="#cta" class="btn btn-primary btn-lg me-3 mb-2 pl-3">
                         <i class="bi bi-person-plus-fill"></i> Join Now
                     </a>
-                    <a href="#about" class="btn btn-outline-light btn-lg px-3">
+                    <a href="#about" class="btn btn-outline-light btn-lg mb-2">
                         <i class="bi bi-info-circle"></i> Learn More
                     </a>
                 </div>
                 <div class="col-lg-6">
-                    <img src="{{ asset('img/project29.jpeg') }}" alt="Project 29"
-                        class="img-fluid rounded shadow-md mt-2" height="80" style="height: 500px; width: 600px;">
+                    <img src="img/project29.jpeg" alt="James Papy Kwabo" class="img-fluid hero-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who I Am Section -->
+    <section id="about" class="who-section">
+        <div class="container">
+            <h2 class="section-title text-center w-100">Who I Am</h2>
+            <div class="row mt-5">
+                <div class="col-lg-6 mb-4 about">
+                    <img src="{{ asset('img/Jpk.jpeg') }}" alt="James Papy Kwabo" class="img-fluid rounded shadow">
+                </div>
+                <div class="col-lg-6">
+                    <div class="who-card">
+                        <h3 class="mb-4" style="color: var(--navy-blue);">Community Leader. Educator. Change-Maker.
+                        </h3>
+                        <p class="lead">James Papy Kwabo is a distinguished community leader, lecturer at Lofa County
+                            University, and passionate youth advocate committed to driving positive change in rural
+                            Liberia.</p>
+                        <p>As the founder of Alternative Youth Radio and a 2019 Mandela Washington Fellow (YALI), James
+                            continues to amplify the voices of youth and marginalized communities, advocating for
+                            education access, civic participation, and sustainable development.</p>
+                        <p>James Papy Kwabo Jr. was born on November 26, 1989, in Luyeama Town, Zorzor District, Lofa
+                            County, Liberia. Raised in rural Liberia, he experienced both the warmth of his community
+                            and the challenges faced by many underserved populations. Orphaned at a young age and
+                            surviving a serious accident at 17, James developed resilience and a lifelong commitment to
+                            uplifting others; values that continue to guide his work today.</p>
+                        <a href="about.html" class="btn btn-primary mt-3">Read Full Biography</a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     {{-- About Section --}}
-    <section id="about" class="py-5 mt-5 bg-light">
+    <section id="#about" class="bg-light">
         <div class="container">
-            <h2 class="text-center section-title">About Project 29</h2>
+            <div class="abt-content">
+                <h2 class="text-center section-title mt-5">About Project 29</h2>
+            </div>
             <div class="row mt-2">
                 <div class="col-lg-6">
                     <h3 class="mb-4">Our Mission</h3>
@@ -259,78 +462,86 @@
         </div>
     </section>
 
-    {{-- Features Section --}}
-    <section id="features" class="py-5">
+    <!-- Key Focus Areas -->
+    <section id="focus" class="focus-section">
         <div class="container">
-            <h2 class="text-center section-title">Key Features</h2>
+            <h2 class="section-title text-center w-100">Key Focus Areas</h2>
             <div class="row mt-5">
-                <div class="col-md-4 mb-4">
-                    <div class="card feature-card">
-                        <div class="card-body text-center p-4">
-                            <div class="feature-icon">
-                                <i class="bi bi-people-fill"></i>
-                            </div>
-                            <h4>Community Building</h4>
-                            <p>Connect with like-minded individuals across districts, clans, and towns to build a strong
-                                network.</p>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="focus-card text-center">
+                        <div class="focus-icon mx-auto">
+                            <i class="bi bi-people-fill"></i>
                         </div>
+                        <h4 style="color: var(--navy-blue);">Youth & Community Development</h4>
+                        <p>Empowering youth through mentorship, skills development, and civic engagement programs across
+                            rural communities.</p>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card feature-card">
-                        <div class="card-body text-center p-4">
-                            <div class="feature-icon">
-                                <i class="bi bi-graph-up"></i>
-                            </div>
-                            <h4>Data-Driven Insights</h4>
-                            <p>Advanced analytics and reporting to track growth, engagement, and demographic trends.</p>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="focus-card text-center">
+                        <div class="focus-icon mx-auto">
+                            <i class="bi bi-building"></i>
                         </div>
+                        <h4 style="color: var(--navy-blue);">Political Leadership & Governance</h4>
+                        <p>Promoting inclusive governance, accountability, transparency, and ethical public leadership.
+                        </p>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card feature-card">
-                        <div class="card-body text-center p-4">
-                            <div class="feature-icon">
-                                <i class="bi bi-shield-check"></i>
-                            </div>
-                            <h4>Secure Platform</h4>
-                            <p>Your data is protected with industry-standard security measures and role-based access
-                                control.</p>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="focus-card text-center">
+                        <div class="focus-icon mx-auto">
+                            <i class="bi bi-heart-fill"></i>
                         </div>
+                        <h4 style="color: var(--navy-blue);">Humanitarian Action</h4>
+                        <p>Addressing education access, supporting vulnerable communities, and advancing social equity.
+                        </p>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card feature-card">
-                        <div class="card-body text-center p-4">
-                            <div class="feature-icon">
-                                <i class="bi bi-phone"></i>
-                            </div>
-                            <h4>Mobile Friendly</h4>
-                            <p>Access the platform from any device - desktop, tablet, or mobile phone.</p>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="focus-card text-center">
+                        <div class="focus-icon mx-auto">
+                            <i class="bi bi-broadcast"></i>
                         </div>
+                        <h4 style="color: var(--navy-blue);">Advocacy & Media</h4>
+                        <p>Amplifying youth voices through Alternative Youth Radio, advocating for human rights and
+                            freedom of expression.</p>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card feature-card">
-                        <div class="card-body text-center p-4">
-                            <div class="feature-icon">
-                                <i class="bi bi-envelope"></i>
-                            </div>
-                            <h4>Real-time Updates</h4>
-                            <p>Receive instant notifications about your membership status and important announcements.
-                            </p>
-                        </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Highlights -->
+    <section id="awards" class="impact-section">
+        <div class="container">
+            <h2 class="section-title text-center w-100">Impact Highlights</h2>
+            <div class="row mt-5">
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="impact-card text-center">
+                        <i class="bi bi-broadcast impact-icon"></i>
+                        <h4>Founder</h4>
+                        <p class="mb-0">Alternative Youth Radio</p>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card feature-card">
-                        <div class="card-body text-center p-4">
-                            <div class="feature-icon">
-                                <i class="bi bi-hand-thumbs-up"></i>
-                            </div>
-                            <h4>Volunteer Opportunities</h4>
-                            <p>Find meaningful ways to contribute your skills and time to the movement.</p>
-                        </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="impact-card text-center">
+                        <i class="bi bi-book impact-icon"></i>
+                        <h4>Lecturer</h4>
+                        <p class="mb-0">Lofa County University</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="impact-card text-center">
+                        <i class="bi bi-award impact-icon"></i>
+                        <h4>2024 MTN Hero</h4>
+                        <p class="mb-0">Hero of Change Award</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="impact-card text-center">
+                        <i class="bi bi-globe impact-icon"></i>
+                        <h4>2019 YALI Fellow</h4>
+                        <p class="mb-0">Mandela Washington Fellowship</p>
                     </div>
                 </div>
             </div>
@@ -340,7 +551,7 @@
     {{-- Stats Section --}}
     <section class="py-5 bg-light">
         <div class="container">
-             <h2 class="text-center section-title">Members Stats</h2>
+            <h2 class="text-center section-title">Members Stats</h2>
             <div class="row text-center g-4">
 
                 {{-- Total Members --}}
@@ -385,84 +596,153 @@
             </div>
         </div>
     </section>
-
-    {{-- CTA Section --}}
-    <section id="cta" class="cta-section text-center">
+    <!-- CTA Section -->
+    <section id="cta" class="cta-section">
         <div class="container">
-            <h2 class="display-4 fw-bold section-title mb-4">Ready to Make a Difference?</h2>
-            <p class="lead text-black mb-5">Join thousands of members already part of Project 29.Your voice, your
-                participation, and your leadership matter. Together,
-                we're
-                building a better tomorrow. !</p>
+            <h2 class="display-4 fw-bold mb-4 section-title text-white">Ready to Make a Difference?</h2>
+            <p class="lead mb-5">Join the movement for youth empowerment and community transformation. Your voice
+                matters. Your participation counts.!!</p>
+            <a href="volunteer.html" class="btn btn-primary btn-lg me-3 mb-3">
+                <i class="bi bi-hand-thumbs-up"></i> Volunteer
+            </a>
+            <a href="partner.html" class="btn btn-outline-light btn-lg me-3 mb-3">
+                <i class="bi bi-handshake"></i> Partner With Us
+            </a>
+            <a href="support.html" class="btn btn-outline-light btn-lg mb-3">
+                <i class="bi bi-heart"></i> Support the Mission
+            </a>
             @auth
-                <a href="{{ route('members.create') }}" class="btn btn-light btn-lg px-5">
+                <a href="{{ route('members.create') }}" class="btn btn-outline-light btn-lg me-3 mb-3">
                     <i class="bi bi-person-plus-fill"></i> Register as Member
                 </a>
             @else
-                <a href="{{ route('register') }}" class="btn btn-light btn-lg px-5">
+                <a href="{{ route('register') }}" class="btn btn-outline-light btn-lg me-3 mb-3">
                     <i class="bi bi-person-plus-fill"></i> Get Started Today
                 </a>
             @endauth
         </div>
     </section>
 
-    {{-- Contact Section --}}
-    <section id="contact" class="py-5 bg-light">
+    <!-- Latest News -->
+    <section id="blogs" class="news-section">
         <div class="container">
-            <h2 class="text-center section-title">Contact Us</h2>
+            <h2 class="section-title text-center w-100">Latest News & Updates</h2>
+            <div class="row mt-5">
+                <div class="col-md-4 mb-4">
+                    <div class="news-card">
+                        <img src="img/news1.jpg" alt="News" class="news-image">
+                        <div class="news-content">
+                            <p class="news-date"><i class="bi bi-calendar"></i> December 20, 2025</p>
+                            <h5 style="color: var(--navy-blue);">Community Dialogue on Youth Employment</h5>
+                            <p>Over 300 youth leaders gathered in Voinjama for a groundbreaking dialogue on employment
+                                opportunities...</p>
+                            <a href="blog.html" class="btn btn-sm btn-primary">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="news-card">
+                        <img src="{{ asset('img/news.jpeg') }}" alt="News" class="news-image">
+                        <div class="news-content">
+                            <p class="news-date"><i class="bi bi-calendar"></i> December 15, 2025</p>
+                            <h5 style="color: var(--navy-blue);">Alternative Youth Radio Celebrates 5 Years</h5>
+                            <p>Marking five years of amplifying youth voices and driving community engagement across
+                                Lofa County...</p>
+                            <a href="blog.html" class="btn btn-sm btn-primary">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="news-card">
+                        <img src="img/news3.jpg" alt="News" class="news-image">
+                        <div class="news-content">
+                            <p class="news-date"><i class="bi bi-calendar"></i> December 10, 2025</p>
+                            <h5 style="color: var(--navy-blue);">Humanitarian Support Initiative Launched</h5>
+                            <p>New program provides educational materials and scholarships to 200 vulnerable students in
+                                rural areas...</p>
+                            <a href="blog.html" class="btn btn-sm btn-primary">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="blog.html" class="btn btn-primary btn-lg">View All News & Articles</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section bg-light">
+        <div class="container">
+            <h2 class="section-title text-center w-100">Contact</h2>
             <div class="row mt-5">
                 <div class="col-lg-4 text-center mb-4">
                     <i class="bi bi-geo-alt-fill" style="font-size: 3rem; color: var(--saffron-yellow);"></i>
-                    <h5 class="mt-3">Address</h5>
-                    <p>123 Project Street<br>Kigali, Rwanda</p>
+                    <h5 class="mt-3" style="color: var(--navy-blue);">Location</h5>
+                    <p>Lofa County Electoral District #5<br>Zorzor City, Liberia</p>
                 </div>
                 <div class="col-lg-4 text-center mb-4">
                     <i class="bi bi-envelope-fill" style="font-size: 3rem; color: var(--saffron-yellow);"></i>
-                    <h5 class="mt-3">Email</h5>
-                    <p>info@project29.rw<br>support@project29.rw</p>
+                    <h5 class="mt-3" style="color: var(--navy-blue);">Email</h5>
+                    <p>info@jamespapykwabo.org<br>contact@jamespapykwabo.org</p>
                 </div>
                 <div class="col-lg-4 text-center mb-4">
                     <i class="bi bi-phone-fill" style="font-size: 3rem; color: var(--saffron-yellow);"></i>
-                    <h5 class="mt-3">Phone</h5>
-                    <p>+250 XXX XXX XXX<br>+250 YYY YYY YYY</p>
+                    <h5 class="mt-3" style="color: var(--navy-blue);">Phone</h5>
+                    <p>+231 77 061 5847<br>+231 88 003 7475</p>
                 </div>
             </div>
         </div>
     </section>
 
-    {{-- Footer --}}
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 mb-4">
-                    <h5 class="text-uppercase mb-3" style="color: var(--saffron-yellow);">
-                        Project 29</h5>
-                    <p>Building a brighter future through grassroots mobilization and civic engagement.</p>
+                    <h5>JAMES PAPY KWABO</h5>
+                    <p>Empowering Youth. Strengthening Communities. Advancing Liberia.</p>
+                    <p class="mt-3"><small>Community Leader | Lecturer | Youth Advocate | Humanitarian</small></p>
                 </div>
-                <div class="col-lg-4 mb-4">
-                    <h5 class="text-uppercase mb-3" style="color: var(--saffron-yellow);">Quick Links</h5>
+                <div class="col-lg-2 mb-4">
+                    <h5>Quick Links</h5>
                     <ul class="list-unstyled">
                         <li><a href="#about">About</a></li>
-                        <li><a href="#features">Features</a></li>
-                        <li><a href="#cta">Join Us</a></li>
-                        <li><a href="{{ route('login') }}">Login</a></li>
+                        <li><a href="#youth">Youth Development</a></li>
+                        <li><a href="#political">Political Leadership</a></li>
+                        <li><a href="#awards">Awards</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 mb-4">
+                    <h5>Resources</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="#news">News</a></li>
+                        <li><a href="volunteer.html">Volunteer</a></li>
+                        <li><a href="partner.html">Partnerships</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-4 mb-4">
-                    <h5 class="text-uppercase mb-3" style="color: var(--saffron-yellow);">Follow Us</h5>
-                    <div class="d-flex gap-3">
-                        <a href="#" class="text-decoration-none fs-4"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="text-decoration-none fs-4"><i class="bi bi-twitter"></i></a>
-                        <a href="#" class="text-decoration-none fs-4"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="text-decoration-none fs-4"><i class="bi bi-linkedin"></i></a>
+                    <h5>Follow Us</h5>
+                    <div class="social-links mb-3">
+                        <a href="#"><i class="bi bi-facebook"></i></a>
+                        <a href="#"><i class="bi bi-twitter"></i></a>
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-linkedin"></i></a>
+                        <a href="#"><i class="bi bi-youtube"></i></a>
                     </div>
+                    <p><small>Project 29 | Not Too Young To Lead Movement</small></p>
                 </div>
             </div>
-            <hr class="my-4" style="border-color: var(--saffron-yellow);">
-            <div class="text-center">
-                <p>Lofa County Electoral District #5 | Liberia</p>
-                Not Too Young To Lead Movement | Youth Engagement for 2029 Elections
-                <p class="mb-0">&copy; {{ date('Y') }} Project 29. All rights reserved.</p>
+            <hr style="border-color: rgba(255, 179, 0, 0.3); margin: 2rem 0;">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3">
+                    <p class="mb-0">&copy; 2025 www.jamespapykwabo.org. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="privacy.html" class="me-3">Privacy Policy</a>
+                    <a href="disclaimer.html">Disclaimer</a>
+                </div>
             </div>
         </div>
     </footer>
@@ -481,6 +761,16 @@
                     });
                 }
             });
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.backgroundColor = 'rgba(0, 31, 63, 0.98)';
+            } else {
+                navbar.style.backgroundColor = 'var(--navy-blue)';
+            }
         });
     </script>
 </body>
