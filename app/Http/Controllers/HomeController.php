@@ -9,7 +9,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $totalMembers = Member::count();
+        // $totalMembers = Member::all();
         $totalMale = Member::where('gender', 'male')->count();
         $totalFemale = Member::where('gender', 'female')->count();
 
