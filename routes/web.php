@@ -3,10 +3,11 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\{DashboardController, DistrictController, ClanController, TownController, MemberController, UserController, HomeController};
+use App\Http\Controllers\{DashboardController, DistrictController, ClanController, TownController, MemberController, UserController, HomeController, AboutController};
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::resource('about', AboutController::class);
 
 // Auth routes
 Auth::routes();
