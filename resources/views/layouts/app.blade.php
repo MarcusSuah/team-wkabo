@@ -687,6 +687,31 @@
             color: var(--saffron-yellow);
         }
 
+        /* Footer Logo */
+        .footer-logo img {
+            max-width: 120px;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .footer {
+                text-align: center;
+            }
+
+            .footer-logo img {
+                max-width: 100px;
+                margin-bottom: 1rem;
+                border-radius: 6px;
+
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+        }
+
         /* Mobile Responsive */
         @media (max-width: 992px) {
             .page-header h1 {

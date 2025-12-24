@@ -52,14 +52,14 @@
                             <input name="remember" id="remember_me" type="checkbox" value="remember-me"> Stay logged in
                         </label>
                     </div>
-                    @if (Route::has('password.request'))
+                    {{-- @if (Route::has('password.request'))
                         <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             href="{{ route('password.request') }}">
                             {{ __('Forgot your password?') }}
                         </a>
-                    @endif
-                    <a href="{{ route('register') }}"
-                        class="ml-4 underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Register</a>
+                    @endif --}}
+                    {{-- <a href="{{ route('register') }}"
+                        class="ml-4 underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Register</a> --}}
                 </div>
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Login In</button>
                 <p class="mt-5 mb-3 text-muted">&copy; @php echo date('Y'); @endphp.</p>

@@ -9,7 +9,8 @@
             <div class="text-muted">{{ now()->format('l, F j, Y') }}</div>
         </div>
 
-        {{-- Statistics Cards --}}
+
+        {{-- Secondary Stats --}}
         <div class="row g-4 mb-4">
             <div class="col-md-3">
                 <div class="card stat-card h-100">
@@ -26,58 +27,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-3">
-                <div class="card stat-card h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-muted mb-1">Pending</h6>
-                                <h3 class="mb-0">{{ number_format($stats['pending_members'] ?? 0) }}</h3>
-                            </div>
-                            <div class="fs-1 text-warning">
-                                <i class="bi bi-clock-fill"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card stat-card h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-muted mb-1">Approved</h6>
-                                <h3 class="mb-0">{{ number_format($stats['approved_members'] ?? 0) }}</h3>
-                            </div>
-                            <div class="fs-1 text-success">
-                                <i class="bi bi-check-circle-fill"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card stat-card h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-muted mb-1">First-Time Voters</h6>
-                                <h3 class="mb-0">{{ number_format($stats['first_time_voters'] ?? 0) }}</h3>
-                            </div>
-                            <div class="fs-1 text-info">
-                                <i class="bi bi-star-fill"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- Secondary Stats --}}
-        <div class="row g-4 mb-4">
             <div class="col-md-3">
                 <div class="card stat-card h-100">
                     <div class="card-body">
@@ -121,22 +70,6 @@
                             </div>
                             <div class="fs-1 text-secondary">
                                 <i class="bi bi-building"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card stat-card h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-muted mb-1">Rejected</h6>
-                                <h3 class="mb-0">{{ number_format($stats['rejected_members'] ?? 0) }}</h3>
-                            </div>
-                            <div class="fs-1 text-danger">
-                                <i class="bi bi-x-circle-fill"></i>
                             </div>
                         </div>
                     </div>
