@@ -93,8 +93,8 @@
                         <div class="col-md-6">
                             <label class="form-label">Primary Phone <span class="text-danger">*</span></label>
                             <input type="tel" name="phone_primary" id="phone_primary"
-                                class="form-control @error('phone_primary') is-invalid @enderror" required
-                                value="{{ old('phone_primary') }}">
+                                class="form-control @error('phone_primary') is-invalid @enderror" 
+                                value="{{ old('phone_primary') }}" required>
                             <div class="form-check mt-2">
                                 <input type="checkbox" name="whatsapp_primary" id="whatsapp_primary"
                                     class="form-check-input" value="1"
@@ -125,8 +125,8 @@
                         <div class="col-md-6">
                             <label class="form-label">Email Address <span class="text-danger">*</span></label>
                             <input type="email" name="email" id="email"
-                                class="form-control @error('email') is-invalid @enderror" required
-                                value="{{ old('email') }}">
+                                class="form-control @error('email') is-invalid @enderror" 
+                                value="{{ old('email') }}" required>
                             @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -350,21 +350,36 @@
             document.getElementById('dob').addEventListener('change', function() {
                 const dob = new Date(this.value);
                 const today = new Date();
-                const target2029 = new Date(2029, 0, 1);
 
+                // Calculate current age
                 let currentAge = today.getFullYear() - dob.getFullYear();
                 const monthDiff = today.getMonth() - dob.getMonth();
                 if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
                     currentAge--;
                 }
 
+                // Calculate age in October 2023
+                const oct2023 = new Date(2023, 9, 1); // October 1, 2023
+                let age2023 = 2023 - dob.getFullYear();
+                const monthDiff2023 = 9 - dob.getMonth(); // October is month 9
+                if (monthDiff2023 < 0 || (monthDiff2023 === 0 && 1 < dob.getDate())) {
+                    age2023--;
+                }
+
+                // Calculate age in October 2029
+                const oct2029 = new Date(2029, 9, 1); // October 1, 2029
                 let age2029 = 2029 - dob.getFullYear();
+                const monthDiff2029 = 9 - dob.getMonth();
+                if (monthDiff2029 < 0 || (monthDiff2029 === 0 && 1 < dob.getDate())) {
+                    age2029--;
+                }
 
                 document.getElementById('currentAge').value = currentAge;
                 document.getElementById('age2029').value = age2029;
 
                 // Check if first-time voter
-                if (currentAge < 18 && age2029 >= 18) {
+                // Rule: Age in Oct 2023 < 18 AND Age in Oct 2029 >= 18 AND Age in Oct 2029 < 23
+                if (age2023 < 18 && age2029 >= 18 && age2029 < 23) {
                     document.getElementById('firstTimeVoter').textContent = '✓ First-Time Voter in 2029';
                 } else {
                     document.getElementById('firstTimeVoter').textContent = '';
@@ -469,11 +484,17 @@
                         .then(res => res.json())
                         .then(data => {
                             if (data.exists) {
-                                document.getElementById('emailError').textContent =
-                                    'This email or phone is already registered';
+                                if (!document.getElementById('duplicateError')) {
+                                    const errorEl = document.createElement('div');
+                                    errorEl.id = 'duplicateError';
+                                    errorEl.className = 'alert alert-warning mt-2';
+                                    errorEl.innerHTML = '<i class="bi bi-exclamation-triangle"></i> This email or phone is already registered';
+                                    document.getElementById('phone_primary').parentElement.insertAdjacentElement('afterend', errorEl);
+                                }
                                 document.getElementById('submitBtn').disabled = true;
                             } else {
-                                document.getElementById('emailError').textContent = '';
+                                const errorEl = document.getElementById('duplicateError');
+                                if (errorEl) errorEl.remove();
                                 document.getElementById('submitBtn').disabled = false;
                             }
                         })
@@ -482,68 +503,6 @@
                         });
                 }
             }
-
-            // Signature pad
-            const canvas = document.getElementById('signature');
-            const ctx = canvas.getContext('2d');
-            let isDrawing = false;
-
-            canvas.width = canvas.offsetWidth;
-            canvas.height = 150;
-
-            canvas.addEventListener('mousedown', startDrawing);
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('mouseup', stopDrawing);
-            canvas.addEventListener('mouseout', stopDrawing);
-
-            // Touch events
-            canvas.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                const touch = e.touches[0];
-                const mouseEvent = new MouseEvent('mousedown', {
-                    clientX: touch.clientX,
-                    clientY: touch.clientY
-                });
-                canvas.dispatchEvent(mouseEvent);
-            });
-
-            canvas.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                const touch = e.touches[0];
-                const mouseEvent = new MouseEvent('mousemove', {
-                    clientX: touch.clientX,
-                    clientY: touch.clientY
-                });
-                canvas.dispatchEvent(mouseEvent);
-            });
-
-            canvas.addEventListener('touchend', (e) => {
-                e.preventDefault();
-                const mouseEvent = new MouseEvent('mouseup', {});
-                canvas.dispatchEvent(mouseEvent);
-            });
-
-            function startDrawing(e) {
-                isDrawing = true;
-                const rect = canvas.getBoundingClientRect();
-                ctx.beginPath();
-                ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
-            }
-
-            function draw(e) {
-                if (!isDrawing) return;
-                const rect = canvas.getBoundingClientRect();
-                ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-                ctx.stroke();
-            }
-
-            function stopDrawing() {
-                isDrawing = false;
-            }
-
-            document.getElementById('clearSignature').addEventListener('click', function() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-            });
         </script>
     @endpush
 @endsection

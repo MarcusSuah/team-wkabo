@@ -1,4 +1,3 @@
-{{-- resources/views/layouts/dashboard.blade.php --}}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -205,7 +204,7 @@
                 <div class="dropdown">
                     <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         @if (auth()->user()->avatar)
-                            <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="Avatar"
+                            <img src="{{ asset( auth()->user()->avatar) }}" alt="Avatar"
                                 class="rounded-circle" width="30" height="30">
                         @else
                             <i class="bi bi-person-circle"></i>

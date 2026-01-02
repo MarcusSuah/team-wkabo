@@ -9,6 +9,7 @@ use App\Models\Town;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -36,7 +37,10 @@ class DashboardController extends Controller
             'total_districts' => District::count(),
             'total_clans' => Clan::count(),
             'total_towns' => Town::count(),
-            'first_time_voters' => Member::whereRaw('current_age < 18 AND age_2029 >= 18')->count(),
+            'first_time_voters' => Member::where('age_2023', '<', 18)
+                ->where('age_2029', '>=', 18)
+                ->where('age_2029', '<', 23)
+                ->count(),
         ];
 
         // Basic Statistics
@@ -47,33 +51,42 @@ class DashboardController extends Controller
 
         // Districts
         $totalDistricts = District::count();
-        $towns = Town::withCount('members')->get();
         $districts = District::withCount('members')->get();
 
         // Clans (max 6)
         $registeredClans = Clan::count();
         $clanPercentage = 6 > 0 ? round(($registeredClans / 6) * 100, 1) : 0;
-        $clans = Clan::withCount('members')->get();
+        $clans = Clan::withCount('members')->orderBy('members_count', 'desc')->get();
 
         // Towns (max 50)
         $registeredTowns = Town::count();
         $townGrowthPercent = 50 > 0 ? round(($registeredTowns / 50) * 100, 1) : 0;
-        $towns = Town::withCount('members')->get();
-
-        // Towns with member counts (all towns, even with 0 members)
-        $towns = Town::leftJoin('members', 'members.town_id', '=', 'towns.id')->leftJoin('districts', 'districts.id', '=', 'towns.district_id')->select('towns.id', 'towns.name', 'districts.name as district_name', DB::raw('COUNT(members.id) as members_count'))->groupBy('towns.id', 'towns.name', 'districts.name')->orderBy('districts.name')->orderBy('towns.name')->get();
+        $towns = Town::withCount('members')->orderBy('members_count', 'desc')->get();
 
         // Gender breakdown
-        $genderData = Member::select('gender', DB::raw('count(*) as count'))->groupBy('gender')->get();
+        $genderData = Member::select('gender', DB::raw('count(*) as count'))
+            ->groupBy('gender')
+            ->get();
 
         // District breakdown
-        $districtData = Member::select('districts.name', DB::raw('count(*) as count'))->join('districts', 'members.district_id', '=', 'districts.id')->groupBy('districts.name')->get();
+        $districtData = Member::select('districts.name', DB::raw('count(*) as count'))
+            ->join('districts', 'members.district_id', '=', 'districts.id')
+            ->groupBy('districts.name')
+            ->orderBy('count', 'desc')
+            ->get();
 
         // WhatsApp Statistics
-        $whatsappCount = Member::where('whatsapp_primary', true)->orWhere('whatsapp_secondary', true)->count();
+        $whatsappCount = Member::where('whatsapp_primary', true)
+            ->orWhere('whatsapp_secondary', true)
+            ->count();
 
         // Occupation Statistics
-        $occupationStats = Member::selectRaw('occupation, COUNT(*) as count')->whereNotNull('occupation')->groupBy('occupation')->orderByRaw('count DESC')->limit(10)->get();
+        $occupationStats = Member::selectRaw('occupation, COUNT(*) as count')
+            ->whereNotNull('occupation')
+            ->groupBy('occupation')
+            ->orderByRaw('count DESC')
+            ->limit(10)
+            ->get();
 
         // Age groups
         $ageGroups = [
@@ -85,25 +98,53 @@ class DashboardController extends Controller
             '56+' => Member::where('current_age', '>', 55)->count(),
         ];
 
-        // Monthly registration trend
-        $monthlyRegistrations = Member::select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'), DB::raw('count(*) as count'))->groupBy('month')->orderBy('month', 'desc')->limit(12)->get();
+        // Monthly registration trend (Last 12 months)
+        $monthlyRegistrations = collect();
+        
+        for ($i = 11; $i >= 0; $i--) {
+            $startOfMonth = Carbon::now()->subMonths($i)->startOfMonth();
+            $endOfMonth = Carbon::now()->subMonths($i)->endOfMonth();
+            
+            $count = Member::whereBetween('created_at', [$startOfMonth, $endOfMonth])->count();
+            
+            $monthlyRegistrations->push([
+                'month' => $startOfMonth->format('M Y'),
+                'count' => $count
+            ]);
+        }
 
         // Volunteer statistics
         $volunteerStats = [
-            'willing_to_volunteer' => Member::where('willing_to_volunteer', true)->count(),
-            'willing_to_lead' => Member::where('willing_to_lead', true)->count(),
+            'willing_to_volunteer' => Member::where('willing_to_volunteer', 'Yes')->count(),
+            'willing_to_lead' => Member::where('willing_to_lead', 'Yes')->count(),
         ];
 
-        return view('dashboards.admin', compact('totalMembers', 'clans', 'stats', 'whatsappCount', 'occupationStats', 'genderData', 'districtData', 'ageGroups', 'registeredClans', 'registeredTowns', 'towns', 'monthlyRegistrations', 'volunteerStats', 'totalDistricts', 'districts'));
+        return view('dashboards.admin', compact(
+            'totalMembers',
+            'clans',
+            'stats',
+            'whatsappCount',
+            'occupationStats',
+            'genderData',
+            'districtData',
+            'ageGroups',
+            'registeredClans',
+            'registeredTowns',
+            'towns',
+            'monthlyRegistrations',
+            'volunteerStats',
+            'totalDistricts',
+            'districts'
+        ));
     }
 
     public function manager()
     {
         $stats = [
             'total_members' => Member::count(),
-            'pending_members' => 0, // REQUIRED for shared views
+            'pending_members' => Member::where('status', 'pending')->count(),
             'approved_members' => Member::where('status', 'approved')->count(),
-            'rejected_members' => 0,
+            'rejected_members' => Member::where('status', 'rejected')->count(),
             'total_districts' => District::count(),
             'total_towns' => Town::count(),
         ];

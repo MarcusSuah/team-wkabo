@@ -362,7 +362,7 @@
                 <div class="col-lg-4 text-center mb-4">
                     <i class="bi bi-envelope-fill" style="font-size: 3rem; color: var(--saffron-yellow);"></i>
                     <h5 class="mt-3" style="color: var(--navy-blue);">Email</h5>
-                    <p>info@jamespapykwabo.org<br>contact@jamespapykwabo.org</p>
+                    <p>info@jamespapykwabo.com<br>contact@jamespapykwabo.com</p>
                 </div>
                 <div class="col-lg-4 text-center mb-4">
                     <i class="bi bi-phone-fill" style="font-size: 3rem; color: var(--saffron-yellow);"></i>

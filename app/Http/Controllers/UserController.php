@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\File;
 
 class UserController extends Controller
 {
@@ -46,7 +47,10 @@ class UserController extends Controller
         $validated['password'] = Hash::make($validated['password']);
 
         if ($request->hasFile('avatar')) {
-            $validated['avatar'] = $request->file('avatar')->store('avatars', 'public');
+            $imageName = time().'.'.$request->file('avatar')->extension();
+             $request->file('avatar')->move(public_path('avatars'),
+             $imageName);
+             $validated['avatar'] = "avatars/$imageName";
         }
 
         $user = User::create($validated);
@@ -84,9 +88,15 @@ class UserController extends Controller
 
         if ($request->hasFile('avatar')) {
             if ($user->avatar) {
-                Storage::disk('public')->delete($user->avatar);
+               $filePath = public_path($request->avatars);
+            if (File::exists($filePath)) {
+                File::delete($filePath);
             }
-            $validated['avatar'] = $request->file('avatar')->store('avatars', 'public');
+            }
+            $imageName = time().'.'.$request->file('avatar')->extension();
+             $request->file('avatar')->move(public_path('avatars'), 
+            $imageName);
+            $validated['avatar'] = "avatars/$imageName";
         }
 
         $user->update($validated);
@@ -124,18 +134,11 @@ class UserController extends Controller
                 'Content-Disposition' => "attachment; filename=$filename",
             ];
 
-            $callback = function() use ($users) {
+            $callback = function () use ($users) {
                 $file = fopen('php://output', 'w');
                 fputcsv($file, ['Name', 'Email', 'Username', 'Phone', 'Status', 'Roles']);
                 foreach ($users as $user) {
-                    fputcsv($file, [
-                        $user->name,
-                        $user->email,
-                        $user->username,
-                        $user->phone,
-                        $user->status,
-                        $user->roles->pluck('name')->join(', ')
-                    ]);
+                    fputcsv($file, [$user->name, $user->email, $user->username, $user->phone, $user->status, $user->roles->pluck('name')->join(', ')]);
                 }
                 fclose($file);
             };

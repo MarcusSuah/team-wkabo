@@ -88,7 +88,7 @@
                             <input type="file" name="photo" id="photoInput" class="form-control" accept="image/*">
                             <div id="photoPreview" class="mt-2">
                                 @if ($member->photo)
-                                    <img src="{{ asset('storage/' . $member->photo) }}" class="img-thumbnail"
+                                    <img src="{{ asset( $member->photo) }}" class="img-thumbnail"
                                         style="max-width: 200px;">
                                 @endif
                             </div>
@@ -107,8 +107,8 @@
                         <div class="col-md-6">
                             <label class="form-label">Primary Phone <span class="text-danger">*</span></label>
                             <input type="tel" name="phone_primary" id="phone_primary"
-                                class="form-control @error('phone_primary') is-invalid @enderror" required
-                                value="{{ old('phone_primary', $member->phone_primary) }}">
+                                class="form-control @error('phone_primary') is-invalid @enderror" 
+                                value="{{ old('phone_primary', $member->phone_primary) }}" required>
                             <div class="form-check mt-2">
                                 <input type="checkbox" name="whatsapp_primary" id="whatsapp_primary"
                                     class="form-check-input" value="1"
@@ -139,8 +139,8 @@
                         <div class="col-md-6">
                             <label class="form-label">Email Address <span class="text-danger">*</span></label>
                             <input type="email" name="email" id="email"
-                                class="form-control @error('email') is-invalid @enderror" required
-                                value="{{ old('email', $member->email) }}">
+                                class="form-control @error('email') is-invalid @enderror" 
+                                value="{{ old('email', $member->email) }}" required>
                             @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -379,28 +379,42 @@
         </form>
     </div>
 
-
     @push('scripts')
         <script>
             // Age calculation
             document.getElementById('dob').addEventListener('change', function() {
                 const dob = new Date(this.value);
                 const today = new Date();
-                const target2029 = new Date(2029, 0, 1);
 
+                // Calculate current age
                 let currentAge = today.getFullYear() - dob.getFullYear();
                 const monthDiff = today.getMonth() - dob.getMonth();
                 if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
                     currentAge--;
                 }
 
+                // Calculate age in October 2023
+                const oct2023 = new Date(2023, 9, 1); // October 1, 2023
+                let age2023 = 2023 - dob.getFullYear();
+                const monthDiff2023 = 9 - dob.getMonth(); // October is month 9
+                if (monthDiff2023 < 0 || (monthDiff2023 === 0 && 1 < dob.getDate())) {
+                    age2023--;
+                }
+
+                // Calculate age in October 2029
+                const oct2029 = new Date(2029, 9, 1); // October 1, 2029
                 let age2029 = 2029 - dob.getFullYear();
+                const monthDiff2029 = 9 - dob.getMonth();
+                if (monthDiff2029 < 0 || (monthDiff2029 === 0 && 1 < dob.getDate())) {
+                    age2029--;
+                }
 
                 document.getElementById('currentAge').value = currentAge;
                 document.getElementById('age2029').value = age2029;
 
                 // Check if first-time voter
-                if (currentAge < 18 && age2029 >= 18) {
+                // Rule: Age in Oct 2023 < 18 AND Age in Oct 2029 >= 18 AND Age in Oct 2029 < 23
+                if (age2023 < 18 && age2029 >= 18 && age2029 < 23) {
                     document.getElementById('firstTimeVoter').textContent = '✓ First-Time Voter in 2029';
                 } else {
                     document.getElementById('firstTimeVoter').textContent = '';

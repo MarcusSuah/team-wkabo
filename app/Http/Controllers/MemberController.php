@@ -1,5 +1,4 @@
 <?php
-// app/Http/Controllers/MemberController.php
 namespace App\Http\Controllers;
 
 use App\Models\Member;
@@ -11,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MembershipStatusMail;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\File;
 
 class MemberController extends Controller
 {
@@ -18,7 +18,7 @@ class MemberController extends Controller
     {
         $query = Member::with(['district', 'clan', 'town']);
 
-        // Filters
+        // APPLY FILTERS
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
@@ -27,22 +27,63 @@ class MemberController extends Controller
             $query->where('district_id', $request->district_id);
         }
 
-        if ($request->filled('first_time_voter')) {
-            $query->whereRaw('current_age < 18 AND age_2029 >= 18');
+        if ($request->filled('clan_id')) {
+            $query->where('clan_id', $request->clan_id);
+        }
+
+        if ($request->filled('town_id')) {
+            $query->where('town_id', $request->town_id);
         }
 
         if ($request->filled('gender')) {
             $query->where('gender', $request->gender);
         }
 
-        $members = $query->paginate(15);
-        $districts = District::all();
-
-        if ($request->has('export')) {
-            return $this->export($request->export, $query->get());
+        if ($request->boolean('first_time_voter')) {
+            // First-time voter logic:
+            // Age in Oct 2023 < 18 AND Age in Oct 2029 >= 18 AND Age in Oct 2029 < 23
+            $query->whereRaw('age_2023 < 18 AND age_2029 >= 18 AND age_2029 <= 23');
         }
 
-        return view('members.index', compact('members', 'districts'));
+        // EXPORT (NO PAGINATION)
+        if ($request->filled('export')) {
+            $members = (clone $query)->orderBy('district_id')->orderBy('town_id')->get();
+
+            $filters = $this->buildFilters($request);
+            $title = $this->buildTitle($filters);
+
+            return $this->export($request->export, $members, $filters, $title);
+        }
+
+        // UI PAGINATION
+        $members = $query->orderBy('id')->paginate(20)->withQueryString();
+        $districts = District::all();
+        $towns = Town::all();
+        $clans = Clan::all();
+
+        return view('members.index', compact('members', 'districts', 'towns', 'clans'));
+    }
+
+    private function buildFilters(Request $request): array
+    {
+        return [
+            'district' => $request->filled('district_id') ? District::find($request->district_id)?->name : null,
+            'clan' => $request->filled('clan_id') ? Clan::find($request->clan_id)?->name : null,
+            'town' => $request->filled('town_id') ? Town::find($request->town_id)?->name : null,
+        ];
+    }
+
+    private function buildTitle(array $filters): string
+    {
+        $parts = [];
+
+        foreach ($filters as $key => $value) {
+            if ($value) {
+                $parts[] = ucfirst($key) . ': ' . $value;
+            }
+        }
+
+        return $parts ? 'Members Report – ' . implode(' | ', $parts) : 'Members Report – All Records';
     }
 
     public function create()
@@ -81,11 +122,14 @@ class MemberController extends Controller
 
         // Calculate ages
         $validated['current_age'] = Member::calculateAge($validated['date_of_birth']);
+        $validated['age_2023'] = Member::calculateAge($validated['date_of_birth'], 2023);
         $validated['age_2029'] = Member::calculateAge($validated['date_of_birth'], 2029);
 
         // Handle photo upload
         if ($request->hasFile('photo')) {
-            $validated['photo'] = $request->file('photo')->store('members', 'public');
+            $imageName = time() . '.' . $request->file('photo')->extension();
+            $request->file('photo')->move(public_path('member'), $imageName);
+            $validated['photo'] = "member/$imageName";
         }
 
         if (is_array($request->preferred_contributions)) {
@@ -112,7 +156,7 @@ class MemberController extends Controller
             'last_name' => 'required',
             'phone_primary' => 'required',
             'phone_secondary' => 'nullable',
-            'email' => 'required|email|unique:members,email,' . $member->id,
+            'email' => 'nullable|email|unique:members,email,' . $member->id,
             'date_of_birth' => 'required|date',
             'gender' => 'required|in:male,female,other',
             'district_id' => 'required|exists:districts,id',
@@ -134,14 +178,20 @@ class MemberController extends Controller
 
         // Recalculate ages
         $validated['current_age'] = Member::calculateAge($validated['date_of_birth']);
+        $validated['age_2023'] = Member::calculateAge($validated['date_of_birth'], 2023);
         $validated['age_2029'] = Member::calculateAge($validated['date_of_birth'], 2029);
 
         // Handle photo upload
         if ($request->hasFile('photo')) {
             if ($member->photo) {
-                Storage::disk('public')->delete($member->photo);
+                $filePath = public_path($member->photo);
+                if (File::exists($filePath)) {
+                    File::delete($filePath);
+                }
             }
-            $validated['photo'] = $request->file('photo')->store('members', 'public');
+            $imageName = time() . '.' . $request->file('photo')->extension();
+            $request->file('photo')->move(public_path('member'), $imageName);
+            $validated['photo'] = "member/$imageName";
         }
 
         if (is_array($request->preferred_contributions)) {
@@ -181,31 +231,66 @@ class MemberController extends Controller
         return redirect()->back()->with('success', 'Status updated and email sent');
     }
 
-    private function export($type, $members)
+    private function export(string $type, $members, array $filters, string $title)
     {
+        // GROUP BY DISTRICT → TOWN
+        $grouped = $members->groupBy([fn($m) => $m->district->name ?? 'Unknown District', fn($m) => $m->town->name ?? 'Unknown Town']);
+
         if ($type === 'pdf') {
-            $pdf = Pdf::loadView('members.pdf', compact('members'));
-            return $pdf->download('members.pdf');
+            return Pdf::loadView('members.pdf', [
+                'grouped' => $grouped,
+                'filters' => $filters,
+                'title' => $title,
+                'total' => $members->count(),
+            ])
+                ->setPaper('a4', 'landscape')
+                ->download('members_report.pdf');
         }
 
         if ($type === 'csv') {
-            $filename = 'members_' . date('Y-m-d') . '.csv';
-            $headers = [
+            return $this->exportCsv($members, $filters, $title);
+        }
+    }
+
+    private function exportCsv($members, array $filters, string $title)
+    {
+        $filename = 'members_' . now()->format('Y-m-d') . '.csv';
+
+        return response()->stream(
+            function () use ($members, $filters, $title) {
+                $file = fopen('php://output', 'w');
+
+                // TITLE
+                fputcsv($file, [$title]);
+                fputcsv($file, []);
+
+                // FILTER SUMMARY
+                fputcsv($file, ['Applied Filters']);
+                foreach ($filters as $key => $value) {
+                    if ($value) {
+                        fputcsv($file, [ucfirst($key), $value]);
+                    }
+                }
+
+                fputcsv($file, []);
+                fputcsv($file, ['Total Members', $members->count()]);
+                fputcsv($file, []);
+
+                // HEADERS
+                fputcsv($file, ['ID', 'Name', 'Phone', 'Gender', 'Age', 'Age 2023', 'Age 2029', 'District', 'Clan', 'Town', 'Status']);
+
+                foreach ($members as $m) {
+                    fputcsv($file, [$m->id, $m->full_name, $m->phone_primary, ucfirst($m->gender), $m->current_age, $m->age_2023, $m->age_2029, $m->district->name ?? '', $m->clan->name ?? '', $m->town->name ?? '', $m->status]);
+                }
+
+                fclose($file);
+            },
+            200,
+            [
                 'Content-Type' => 'text/csv',
                 'Content-Disposition' => "attachment; filename=$filename",
-            ];
-
-            $callback = function () use ($members) {
-                $file = fopen('php://output', 'w');
-                fputcsv($file, ['Name', 'Email', 'Phone', 'Gender', 'Age', 'Age 2029', 'District', 'Clan', 'Town', 'Status']);
-                foreach ($members as $member) {
-                    fputcsv($file, [$member->full_name, $member->email, $member->phone_primary, $member->gender, $member->current_age, $member->age_2029, $member->district->name, $member->clan->name, $member->town->name, $member->status]);
-                }
-                fclose($file);
-            };
-
-            return response()->stream($callback, 200, $headers);
-        }
+            ],
+        );
     }
 
     public function checkDuplicate(Request $request)

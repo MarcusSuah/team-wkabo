@@ -50,7 +50,7 @@
                             {{-- Avatar --}}
                             <td>
                                 @if($user->avatar)
-                                    <img src="{{ asset('storage/'.$user->avatar) }}"
+                                    <img src="{{ asset($user->avatar) }}"
                                          class="rounded-circle" width="40" height="40">
                                 @else
                                     <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center"
